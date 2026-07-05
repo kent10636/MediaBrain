@@ -180,3 +180,12 @@ This project is licensed under the [MIT License](LICENSE).
 
 See the [LICENSE](LICENSE) file for the full text.
 
+## Internationalization
+
+- Full Chinese (zh-CN) UI by default.
+- English fallback supported.
+- Auto-detects system locale on first run (via Tauri `os.locale()`).
+- Toggle between 中 / EN in the top navigation.
+- Preference saved in localStorage.
+- Easy to extend: see `src/lib/i18n.ts` for translation keys.
+

@@ -11,13 +11,13 @@ export interface AISummary {
 
 const PLATFORM_TEMPLATES: Record<string, Partial<AISummary>> = {
   youtube: {
-    summary: "A high-quality video covering practical techniques and insights. Strong emphasis on real-world application, clear explanations, and actionable takeaways for developers and enthusiasts.",
+    summary: "高质量视频，涵盖实用技巧与洞见。强调实际应用、清晰讲解，以及对开发者和爱好者的可操作收获。",
     keyPoints: [
-      "Core concepts explained with concrete examples",
-      "Actionable tips and workflows you can apply immediately",
-      "Trade-offs, best practices, and common pitfalls discussed"
+      "核心概念通过具体示例讲解",
+      "可立即应用的实用技巧和工作流",
+      "讨论权衡、最佳实践和常见陷阱"
     ],
-    tags: ["tutorial", "tech", "practical"],
+    tags: ["教程", "技术", "实用"],
   },
   bilibili: {
     summary: "内容丰富、讲解清晰的优质视频。涵盖实际操作技巧、深入思考与实用案例，适合不同水平的观众学习和参考。",
@@ -29,9 +29,9 @@ const PLATFORM_TEMPLATES: Record<string, Partial<AISummary>> = {
     tags: ["教程", "技术", "实用"],
   },
   vimeo: {
-    summary: "Professionally produced video with excellent production value, focused storytelling, and polished presentation suitable for creative and professional audiences.",
-    keyPoints: ["High production quality and clear visuals", "Strong narrative structure", "Valuable creative and technical takeaways"],
-    tags: ["creative", "professional", "design"],
+    summary: "专业制作的优质视频，注重叙事和精良呈现，适合创意和专业观众。",
+    keyPoints: ["高制作质量与清晰画面", "强大的叙事结构", "宝贵的创意与技术收获"],
+    tags: ["创意", "专业", "设计"],
   },
 };
 
@@ -50,12 +50,12 @@ export async function generateAISummary(title: string, platform: string, url: st
   const idMatch = url.match(/[?&]v=([^&]{6,})|youtu\.be\/([^?&/]{6,})|bilibili.*?(BV[A-Za-z0-9]+)|vimeo\.com\/(\d+)/i);
   const identifier = idMatch ? (idMatch[1] || idMatch[2] || idMatch[3] || idMatch[4] || '') : '';
 
-  const summary = `${base.summary} The video “${cleanTitle}” delivers focused value. ${identifier ? `Key reference: ${identifier}. ` : ''}Highly recommended for anyone looking to level up their skills in this area.`;
+  const summary = `${base.summary} 视频《${cleanTitle}》提供专注价值。${identifier ? `关键参考：${identifier}。` : ''}强烈推荐给任何希望在此领域提升技能的人。`;
 
   const keyPoints = [
     ...base.keyPoints!,
-    `Key insights drawn from “${cleanTitle.slice(0, 38)}${cleanTitle.length > 38 ? '…' : ''}”`,
-    "Practical next steps after watching",
+    `从《${cleanTitle.slice(0, 38)}${cleanTitle.length > 38 ? '…' : ''}》提炼的关键见解`,
+    "观看后的实用下一步",
   ].slice(0, 6);
 
   // Intelligent tag expansion based on real title content

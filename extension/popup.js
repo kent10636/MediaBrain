@@ -14,13 +14,13 @@ function showPreview(data) {
 
 async function saveCurrentVideo() {
   saveBtn.disabled = true;
-  statusEl.textContent = 'Detecting video page...';
+  statusEl.textContent = '正在检测视频页面...';
   previewEl.classList.remove('show');
 
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab || !tab.url) {
-      statusEl.textContent = 'No active tab.';
+      statusEl.textContent = '没有活动标签页。';
       saveBtn.disabled = false;
       return;
     }
@@ -44,7 +44,7 @@ async function saveCurrentVideo() {
       saveBtn.disabled = false;
     });
   } catch (e) {
-    statusEl.textContent = 'Error: ' + (e.message || e);
+    statusEl.textContent = '错误：' + (e.message || e);
     saveBtn.disabled = false;
   }
 }
@@ -57,7 +57,7 @@ function detectPlatform(url) {
 }
 
 async function saveToMediaBrain(videoData) {
-  statusEl.textContent = 'Saving...';
+  statusEl.textContent = '保存中...';
 
   // 1. Persist locally in extension storage (for history)
   const existing = await chrome.storage.local.get(['savedVideos']);
@@ -76,9 +76,9 @@ async function saveToMediaBrain(videoData) {
     try { await navigator.clipboard.writeText(entry.url); } catch {}
   }
 
-  statusEl.textContent = '✓ Saved! Open MediaBrain and click "Import from Ext"';
+  statusEl.textContent = '✓ 已保存！打开 MediaBrain 并点击“从扩展导入”';
   setTimeout(() => {
-    statusEl.textContent = 'Data copied to clipboard for MediaBrain.';
+    statusEl.textContent = '数据已复制到剪贴板，供 MediaBrain 使用。';
   }, 2400);
 }
 
@@ -87,8 +87,8 @@ saveBtn.addEventListener('click', saveCurrentVideo);
 // Initial status
 chrome.storage.local.get(['savedVideos'], (res) => {
   if (res.savedVideos && res.savedVideos.length) {
-    statusEl.textContent = `${res.savedVideos.length} videos saved via extension.`;
+    statusEl.textContent = `已通过扩展保存 ${res.savedVideos.length} 个视频。`;
   } else {
-    statusEl.textContent = 'Visit a YouTube or Bilibili video page, then click Save.';
+    statusEl.textContent = '访问 YouTube 或 Bilibili 视频页面，然后点击保存。';
   }
 });

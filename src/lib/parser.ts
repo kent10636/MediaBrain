@@ -28,7 +28,7 @@ export function buildYoutubeCover(vid: string | null): string | null {
 export async function parseVideoLink(input: string): Promise<ParsedVideo> {
   const url = input.trim();
   if (!url) {
-    throw new Error("Empty URL");
+    throw new Error("URL 不能为空");
   }
 
   let platform = "unknown";

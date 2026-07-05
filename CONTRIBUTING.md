@@ -24,6 +24,14 @@ npm run tauri dev
 - Run tests before submitting: `npm test`
 - Keep commits focused and descriptive
 
+## Internationalization (i18n)
+
+- UI is bilingual (Chinese primary, English).
+- Add new translation keys in `src/lib/i18n.ts`.
+- Use `currentT('key')` in components (or the `t` helper).
+- Test both languages via the toggle in the nav.
+- System locale detection happens automatically on first launch.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the [MIT License](LICENSE).
