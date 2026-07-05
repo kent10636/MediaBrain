@@ -1,5 +1,7 @@
 # MediaBrain
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Intelligent Video Library** — Desktop app (Tauri 2) + Manifest V3 browser extension.
