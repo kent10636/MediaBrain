@@ -8,24 +8,24 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Nav
     'nav.subtitle': '智能视频库',
     'nav.aiReady': 'AI 已就绪',
-    'nav.newVideo': '新建视频',
-    'nav.importFromExt': '从扩展导入',
+    'nav.newVideo': '添加视频',
+    'nav.importFromExt': '从浏览器导入',
     'nav.langToggle': '中 / EN',
 
     // Hero
     'hero.badge': 'TAURI + REACT 19 + AI',
-    'hero.title': '您的视频。<br />更聪明。',
-    'hero.subtitle': '粘贴任意视频链接。自动解析。AI 总结。精美整理。',
-    'hero.placeholder': '在此粘贴 YouTube、Bilibili 或任意视频链接...',
-    'hero.parsing': '解析中...',
+    'hero.title': '让视频更聪明',
+    'hero.subtitle': '粘贴链接，一键解析 + AI 总结。轻松管理你的视频库。',
+    'hero.placeholder': '粘贴 YouTube、Bilibili 或其他视频链接...',
+    'hero.parsing': '正在解析...',
     'hero.parseSave': '解析并保存',
-    'hero.supports': '支持 YouTube • Bilibili • Vimeo 等 • 浏览器扩展一键保存',
+    'hero.supports': '支持 YouTube、Bilibili、Vimeo 等平台 • 浏览器扩展一键保存',
 
     // Stats
-    'stats.videosCollected': '已收藏视频',
-    'stats.avgProgress': '平均进度',
-    'stats.fullyWatched': '已看完',
-    'stats.tagsUsed': '使用标签',
+    'stats.videosCollected': '已保存视频',
+    'stats.avgProgress': '平均观看进度',
+    'stats.fullyWatched': '已完整观看',
+    'stats.tagsUsed': '使用过的标签',
 
     // Insights
     'insights.thisWeek': '本周',
@@ -37,41 +37,42 @@ export const translations: Record<Lang, Record<string, string>> = {
     'insights.recommendNext': '推荐下一个',
 
     // Weekly Report
-    'report.title': '周报',
+    'report.title': '本周报告',
     'report.totalVideos': '总视频数',
     'report.avgProgress': '平均进度',
     'report.fullyWatched': '已看完',
-    'report.withAISummary': '有 AI 总结',
-    'report.tip': '提示：使用搜索或平台筛选探索。可以在 YouTube/Bilibili 页面使用浏览器扩展导入更多视频。',
+    'report.withAISummary': '已生成 AI 总结',
+    'report.tip': '提示：使用搜索或平台筛选来浏览内容。你可以在 YouTube/Bilibili 页面使用浏览器扩展一键导入。',
 
     // Library
-    'library.title': '库',
-    'library.noMatches': '无匹配项。请尝试其他搜索。',
-    'library.empty': '您的库是空的',
-    'library.emptyHint': '在上方粘贴 YouTube 或 Bilibili 链接开始。包含 AI 总结 + 标签。',
+    'library.title': '视频库',
+    'library.noMatches': '没有找到匹配的视频，换个关键词试试。',
+    'library.empty': '视频库还是空的',
+    'library.emptyHint': '在上方粘贴 YouTube 或 Bilibili 链接开始吧，系统会自动提取信息并生成 AI 总结和标签。',
 
     // Sidebar
     'sidebar.details': '详情',
-    'sidebar.selectVideo': '选择一个视频',
-    'sidebar.selectHint': '点击库中的任意卡片查看详情、编辑笔记并跟踪进度。',
+    'sidebar.selectVideo': '请选择一个视频',
+    'sidebar.selectHint': '在左侧视频库中点击任意卡片，即可查看详情、编辑笔记并更新观看进度。',
     'sidebar.watchProgress': '观看进度',
     'sidebar.zero': '0%',
     'sidebar.fifty': '50%',
     'sidebar.watched': '已看完',
-    'sidebar.notes': '笔记',
-    'sidebar.notesPlaceholder': '写下您的想法、引用或提醒...',
+    'sidebar.notes': '我的笔记',
+    'sidebar.notesPlaceholder': '记录你的想法、精彩片段或后续计划...',
     'sidebar.aiSummary': 'AI 总结',
     'sidebar.regenerate': '重新生成',
-    'sidebar.keyPoints': '关键点 (AI)',
-    'sidebar.tags': '标签 (AI)',
+    'sidebar.keyPoints': 'AI 关键点',
+    'sidebar.tags': 'AI 标签',
     'sidebar.noTags': '暂无标签',
-    'sidebar.addTag': '+ 标签',
+    'sidebar.addTag': '+ 添加标签',
     'sidebar.deleteVideo': '删除视频',
+    'sidebar.playVideo': '打开视频播放',
 
     // Misc
-    'misc.parsed': '已解析',
-    'misc.loading': '正在从 SQLite 加载您的库…',
-    'misc.bottomHint': '真实 SQLite 持久化 • Grok Imagine 资源 • 一键解析 + AI • 浏览器扩展支持 • 精美暗色 UI',
+    'misc.parsed': '解析成功',
+    'misc.loading': '正在从本地数据库加载视频库…',
+    'misc.bottomHint': '本地 SQLite 存储 • AI 智能总结 • 浏览器扩展支持 • 精美暗黑界面',
   },
   en: {
     // Nav
@@ -136,6 +137,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'sidebar.noTags': 'No tags yet',
     'sidebar.addTag': '+ tag',
     'sidebar.deleteVideo': 'Delete video',
+    'sidebar.playVideo': 'Open / Play Video',
 
     // Misc
     'misc.parsed': 'Parsed',

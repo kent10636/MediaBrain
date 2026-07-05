@@ -9,6 +9,21 @@
     "sql:default",
     "sql:allow-load",
     "sql:allow-execute",
-    "sql:allow-select"
+    "sql:allow-select",
+    "http:default",
+    {
+      "identifier": "http:allow-fetch",
+      "allow": [
+        {
+          "url": "https://api.bilibili.com/*"
+        },
+        {
+          "url": "https://www.bilibili.com/*"
+        },
+        {
+          "url": "https://api.allorigins.win/*"
+        }
+      ]
+    }
   ]
 }

@@ -14,6 +14,7 @@ import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import "./App.css";
 import { t, setLang, getLang, Lang, TranslationKey } from "./lib/i18n";
+import { openUrl } from '@tauri-apps/plugin-opener';
 
 // Type definitions for core entities (used across stages)
 export interface VideoItem {
@@ -29,6 +30,7 @@ export interface VideoItem {
   keyPoints?: string[];
   notes?: string;
   progress: number; // 0-100
+  description?: string | null; // actual video description for relevant AI summaries
 }
 
 const PLATFORM_COLORS: Record<string, string> = {
@@ -165,6 +167,7 @@ function App() {
       savedAt: new Date().toISOString(),
       tags: [],
       progress: 0,
+      description: (parsed as any).description || null,
     };
 
     let persisted: VideoItem = newVideo;
@@ -178,7 +181,7 @@ function App() {
 
     try {
       // Auto AI summary + tags + key points (real structured generation)
-      const ai = await generateAISummary(parsed.title, parsed.platform, parsed.url);
+      const ai = await generateAISummary(parsed.title, parsed.platform, parsed.url, (parsed as any).description);
       await updateVideoAISummary(newVideo.id, ai.summary, ai.keyPoints, ai.tags);
 
       // reload
@@ -188,7 +191,7 @@ function App() {
       persisted = fresh.find((v: any) => v.id === newVideo.id) || newVideo;
     } catch (e) {
       // fallback for AI only; core video already saved if possible
-      const ai = await generateAISummary(parsed.title, parsed.platform, parsed.url);
+      const ai = await generateAISummary(parsed.title, parsed.platform, parsed.url, (parsed as any).description);
       persisted = { ...newVideo, summary: ai.summary, keyPoints: ai.keyPoints, tags: ai.tags };
       // if DB save succeeded, reload; else memory
       try {
@@ -255,6 +258,15 @@ function App() {
     setVideos(prev => prev.filter(v => v.id !== id));
     if (selectedVideo?.id === id) {
       setSelectedVideo(null);
+    }
+  };
+
+  const openVideo = async (url: string) => {
+    try {
+      await openUrl(url);
+    } catch (e) {
+      // fallback if opener plugin not available
+      window.open(url, '_blank');
     }
   };
 
@@ -336,12 +348,13 @@ function App() {
                   savedAt: new Date().toISOString(),
                   tags: ['extension'],
                   progress: 0,
+                  description: (parsed as any).description || null,
                 };
 
                 try {
                   await saveVideo(toDBVideo(imported));
                   const { generateAISummary } = await import('./lib/ai');
-                  const ai = await generateAISummary(imported.title, imported.platform, imported.url);
+                  const ai = await generateAISummary(imported.title, imported.platform, imported.url, (imported as any).description);
                   await updateVideoAISummary(imported.id, ai.summary, ai.keyPoints, [...(imported.tags || []), ...ai.tags]);
                   const rows = await loadVideos();
                   setVideos(rows.map(fromDBVideo));
@@ -419,6 +432,12 @@ function App() {
                 <CheckCircle className="w-4 h-4" /> {currentT('misc.parsed')}: {parseResult.platform} — {parseResult.title}
               </div>
             )}
+            {parseResult && parseResult.platform === 'bilibili' && (
+              <div className="mt-2 p-2 bg-orange-950/60 border border-orange-900 rounded text-xs text-orange-300">
+                注意：Bilibili 直接粘贴可能无法获取真实标题（受保护机制影响）。<br />
+                建议：在浏览器打开视频页面 → 点击扩展图标“Save Video to MediaBrain” → 在应用点击“从扩展导入”。
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -481,7 +500,10 @@ function App() {
             // Better recs: prefer unfinished high progress, then low progress different platform
             let rec = videos.filter(v => v.progress > 30 && v.progress < 95).sort((a,b)=> b.progress - a.progress)[0];
             if (!rec) rec = [...videos].sort((a,b) => a.progress - b.progress)[0] || videos[0];
-            if (rec) setSelectedVideo(rec);
+            if (rec) {
+              setSelectedVideo(rec);
+              openVideo(rec.url);
+            }
           }} className="text-sm h-9 bg-primary/90 text-white">{currentT('insights.recommendNext')}</Button>
         </div>
 
@@ -625,13 +647,23 @@ function App() {
                     <span className="tag">{new Date(selectedVideo.savedAt).toLocaleDateString()}</span>
                   </div>
 
-                  {/* Cover preview */}
+                  <Button 
+                    onClick={() => openVideo(selectedVideo.url)}
+                    className="mb-6 w-full"
+                    variant="default"
+                  >
+                    <Play className="w-4 h-4 mr-2" /> {currentT('sidebar.playVideo')}
+                  </Button>
+
+                  {/* Cover preview - click to play */}
                   <div 
-                    className="w-full aspect-video rounded-xl mb-6 overflow-hidden border border-border bg-black/40" 
+                    className="w-full aspect-video rounded-xl mb-6 overflow-hidden border border-border bg-black/40 cursor-pointer hover:opacity-90 transition"
                     style={{
                       backgroundImage: `url(${selectedVideo.cover || cardStyle})`,
                       backgroundSize: 'cover', backgroundPosition: 'center'
                     }}
+                    onClick={() => openVideo(selectedVideo.url)}
+                    title={currentT('sidebar.playVideo')}
                   >
                     <div className="w-full h-full flex items-center justify-center">
                       <div className="bg-black/50 p-3 rounded-full">
@@ -681,7 +713,7 @@ function App() {
                         <span>{currentT('sidebar.aiSummary')}</span>
                         <Button
                           onClick={async () => {
-                            const ai = await generateAISummary(selectedVideo.title, selectedVideo.platform, selectedVideo.url);
+                            const ai = await generateAISummary(selectedVideo.title, selectedVideo.platform, selectedVideo.url, (selectedVideo as any).description);
                             try {
                               await updateVideoAISummary(selectedVideo.id, ai.summary, ai.keyPoints, ai.tags);
                               const rows = await loadVideos();

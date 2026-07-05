@@ -1,13 +1,14 @@
 // Pure video link parser (Stage 1/2) — directly testable (now async for Bili cover fetch)
 // Exports kept stable: parseVideoLink is the primary shipped function.
 
-import { fetchBilibiliCover } from './bilibili-cover';
+import { fetchBilibiliVideoInfo, fetchBilibiliCover } from './bilibili-cover';
 
 export interface ParsedVideo {
   url: string;
   title: string;
   platform: string;
   cover: string | null;
+  description?: string | null;  // real video description when available (for better AI summaries)
 }
 
 // Pure helpers (no I/O) — extracted per recommended layering
@@ -35,20 +36,55 @@ export async function parseVideoLink(input: string): Promise<ParsedVideo> {
   let title = "Untitled Video";
   let cover: string | null = null;
 
-  // YouTube — pure, instant
+  // YouTube — fetch real title via oEmbed
   if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\b/i.test(url)) {
     platform = "youtube";
     const vid = extractYoutubeId(url);
     title = vid ? `YouTube • ${vid}` : "YouTube Video";
     cover = buildYoutubeCover(vid);
+    if (vid) {
+      try {
+        let fetchFn: typeof fetch = fetch;
+        try {
+          const http = await import('@tauri-apps/plugin-http');
+          if (http.fetch) fetchFn = http.fetch;
+        } catch {}
+        const res = await fetchFn(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${vid}&format=json`, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://www.youtube.com/'
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.title) title = data.title;
+        }
+      } catch {}
+    }
   }
-  // Bilibili — real cover via public API (no placeholder, no hard-code)
-  // See bilibili-cover.ts for CORS note: may be null on direct paste; extension import provides reliable cover.
+  // Bilibili — use dedicated info fetch for real title + cover + description
+  // This is more robust and centralizes the API call + headers.
+  // Extension import is recommended for best reliability on Bilibili.
   else if (/bilibili\.com/i.test(url)) {
     platform = "bilibili";
     const biliId = extractBilibiliId(url);
     title = biliId ? `Bilibili • ${biliId}` : "Bilibili Video";
-    cover = biliId ? await fetchBilibiliCover(biliId) : null;
+    cover = null;
+    let description: string | null = null;
+
+    if (biliId) {
+      const info = await fetchBilibiliVideoInfo(biliId);
+      if (info.title) title = info.title;
+      if (info.cover) cover = info.cover;
+      if (info.description) description = info.description;
+    }
+
+    // Final fallback for cover only
+    if (!cover) {
+      cover = await fetchBilibiliCover(biliId!);
+    }
+
+    return { url, title, platform, cover, description };
   }
   // Vimeo
   else if (/vimeo\.com/i.test(url)) {

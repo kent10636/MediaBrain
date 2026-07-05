@@ -16,6 +16,7 @@ export interface DBVideo {
   summary?: string | null;
   key_points?: string | null; // JSON string
   tags?: string | null;       // JSON string
+  description?: string | null;
 }
 
 // Explicit schema definition for videos table (used in init + tests)
@@ -31,7 +32,8 @@ export const VIDEOS_TABLE_SCHEMA = `
     notes TEXT DEFAULT '',
     summary TEXT,
     key_points TEXT,
-    tags TEXT
+    tags TEXT,
+    description TEXT
   )
 `;
 
@@ -49,6 +51,14 @@ export async function initDb(): Promise<void> {
 
   // Helpful index
   await db.execute(VIDEOS_INDEX_SCHEMA);
+
+  // Add description column for real video content (for relevant AI summaries)
+  // Safe to run even if column exists (will error but we ignore)
+  try {
+    await db.execute(`ALTER TABLE videos ADD COLUMN description TEXT`);
+  } catch (e) {
+    // column already exists or other harmless error
+  }
 }
 
 export async function getDb() {
@@ -70,8 +80,8 @@ export async function saveVideo(video: Omit<DBVideo, 'saved_at'> & { saved_at?: 
 
   await database.execute(
     `INSERT OR REPLACE INTO videos 
-     (id, url, title, platform, cover, saved_at, progress, notes, summary, key_points, tags)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+     (id, url, title, platform, cover, saved_at, progress, notes, summary, key_points, tags, description)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       video.id,
       video.url,
@@ -84,6 +94,7 @@ export async function saveVideo(video: Omit<DBVideo, 'saved_at'> & { saved_at?: 
       video.summary ?? null,
       video.key_points ?? null,
       video.tags ?? null,
+      video.description ?? null,
     ]
   );
 }
@@ -131,6 +142,7 @@ export function toDBVideo(v: any): DBVideo {
     summary: v.summary ?? null,
     key_points: v.keyPoints ? JSON.stringify(v.keyPoints) : null,
     tags: v.tags ? JSON.stringify(v.tags) : null,
+    description: v.description ?? null,
   };
 }
 
@@ -147,5 +159,6 @@ export function fromDBVideo(row: DBVideo): any {
     summary: row.summary || undefined,
     keyPoints: row.key_points ? JSON.parse(row.key_points) : undefined,
     tags: row.tags ? JSON.parse(row.tags) : [],
+    description: row.description || undefined,
   };
 }

@@ -35,7 +35,7 @@ const PLATFORM_TEMPLATES: Record<string, Partial<AISummary>> = {
   },
 };
 
-export async function generateAISummary(title: string, platform: string, url: string): Promise<AISummary> {
+export async function generateAISummary(title: string, platform: string, url: string, description?: string | null): Promise<AISummary> {
   // Simulate realistic processing latency (keeps UX consistent)
   await new Promise(r => setTimeout(r, 420));
 
@@ -50,7 +50,14 @@ export async function generateAISummary(title: string, platform: string, url: st
   const idMatch = url.match(/[?&]v=([^&]{6,})|youtu\.be\/([^?&/]{6,})|bilibili.*?(BV[A-Za-z0-9]+)|vimeo\.com\/(\d+)/i);
   const identifier = idMatch ? (idMatch[1] || idMatch[2] || idMatch[3] || idMatch[4] || '') : '';
 
-  const summary = `${base.summary} 视频《${cleanTitle}》提供专注价值。${identifier ? `关键参考：${identifier}。` : ''}强烈推荐给任何希望在此领域提升技能的人。`;
+  // Use actual video description (when available from parser) to make summaries relevant to real content
+  let summary: string;
+  if (description && description.length > 20) {
+    const shortDesc = description.slice(0, 180).replace(/\s+/g, ' ').trim();
+    summary = `视频主要内容：${shortDesc}${description.length > 180 ? '...' : ''}。${base.summary} 视频《${cleanTitle}》提供专注价值。${identifier ? `关键参考：${identifier}。` : ''}强烈推荐给任何希望在此领域提升技能的人。`;
+  } else {
+    summary = `${base.summary} 视频《${cleanTitle}》提供专注价值。${identifier ? `关键参考：${identifier}。` : ''}强烈推荐给任何希望在此领域提升技能的人。`;
+  }
 
   const keyPoints = [
     ...base.keyPoints!,
@@ -58,9 +65,9 @@ export async function generateAISummary(title: string, platform: string, url: st
     "观看后的实用下一步",
   ].slice(0, 6);
 
-  // Intelligent tag expansion based on real title content
+  // Intelligent tag expansion based on real title content (and desc if present)
   const extra: string[] = [];
-  const t = `${title} ${platform} ${cleanTitle}`.toLowerCase();
+  const t = `${title} ${platform} ${cleanTitle} ${description || ''}`.toLowerCase();
   if (/(react|前端|frontend)/.test(t)) extra.push('react');
   if (/(ai|智能|artificial|machine learning|llm)/.test(t)) extra.push('ai');
   if (/(tauri|desktop|electron|跨平台)/.test(t)) extra.push('desktop');
