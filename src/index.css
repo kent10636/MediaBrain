@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 262.1 83.3% 57.8%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* MediaBrain custom beautiful styles - dark premium */
+.media-brain-app {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #0a0a12 0%, #11111a 100%);
+}
+
+.hero-bg {
+  background-image: linear-gradient(rgba(10,10,18,0.85), rgba(10,10,18,0.75)), url('/src/assets/images/bg-hero-stage1-final.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.video-card {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1),
+              border-color 0.2s;
+  background-image: linear-gradient(rgba(17,17,26,0.92), rgba(17,17,26,0.96)), url('/src/assets/images/card-style-stage1-final.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  border-color: hsl(var(--primary));
+}
+
+.paste-input {
+  @apply bg-secondary border border-border text-lg py-6 px-6 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all;
+}
+
+.nav-logo {
+  transition: transform 0.2s ease;
+}
+
+.nav-logo:hover {
+  transform: scale(1.03);
+}
+
+.tag {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-secondary text-secondary-foreground border border-border;
+}
+
+.progress-bar {
+  @apply h-2 bg-secondary rounded-full overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full bg-primary transition-all duration-300;
+}
+
+.modern-button {
+  @apply inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:pointer-events-none bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8;
+}
+
+.section-title {
+  @apply text-2xl font-semibold tracking-tight;
+}

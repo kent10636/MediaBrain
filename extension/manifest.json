@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "MediaBrain - Video Saver",
+  "version": "1.0.0",
+  "description": "One-click save current video page (YouTube, Bilibili, etc) to MediaBrain app.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["*://*.youtube.com/*", "*://*.bilibili.com/*", "*://*.youku.com/*", "*://*.vimeo.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-128.png",
+      "48": "icons/icon-128.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-128.png",
+    "48": "icons/icon-128.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/watch*", "*://*.bilibili.com/video/*", "*://*.bilibili.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
