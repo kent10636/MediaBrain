@@ -1,6 +1,6 @@
 # MediaBrain
 
-[English](README.md) | [中文](README.zh-CN.md)
+**Languages:** [🇬🇧 English](README.md) • [🇨🇳 中文](README.zh-CN.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
