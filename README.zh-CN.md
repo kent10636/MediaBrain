@@ -7,8 +7,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
-
 **智能视频库** — 桌面应用 (Tauri 2) + Manifest V3 浏览器扩展。
 
 粘贴任意 YouTube 或 Bilibili 链接 → 一键解析（真实标题、封面、平台）。Bilibili 的解析器会尝试从公开的 Bilibili view API 获取真实封面（可能因 CORS 问题返回 null，UI 会回退）。浏览器扩展可提供可靠的 DOM 封面。AI 即时生成丰富的摘要、关键点和智能标签。追踪观看进度、撰写私人笔记、搜索你的库，并获取推荐。直接从浏览器一键保存视频。
