@@ -1,5 +1,7 @@
 # MediaBrain
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 **Intelligent Video Library** — Desktop app (Tauri 2) + Manifest V3 browser extension.
 
 Paste any YouTube or Bilibili link → one-click parse (real title, cover, platform). For Bilibili the shipped parser attempts to fetch the real cover from the public Bilibili view API (may be null on CORS; UI falls back). The browser extension provides reliable DOM cover for Bilibili. AI instantly generates rich summaries, key points, and smart tags. Track watch progress, write private notes, search your library, and get recommendations. Save videos directly from the browser with one click.
@@ -172,5 +174,9 @@ Enjoy! 🎥
 
 ## License
 
+Copyright (c) 2026 kent10636
+
 This project is licensed under the [MIT License](LICENSE).
+
+See the [LICENSE](LICENSE) file for the full text.
 

@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "description": "MediaBrain - Intelligent video collection and AI summary manager with browser extension",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
