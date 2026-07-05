@@ -169,3 +169,8 @@ All code and assets are self-contained inside this directory. Built following th
 
 Enjoy! 🎥
 
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
